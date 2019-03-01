@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  server:
+    container_name: server
+    image: paas/server
+    volumes:
+      - ./server:/usr/src/app
+    ports:
+      - 8080:8080
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+  sync:
+    container_name: sync
+    image: paas/sync
+    command: ["/usr/src/sync/git_sync.sh"]
+    working_dir: "/usr/src/app"
+    volumes:
+      - ./sync:/usr/src/sync
+      - ./server:/usr/src/app
+    logging:
+       driver: "json-file"
+       options:
+         max-size: "50m"
